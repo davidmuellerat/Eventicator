@@ -1,0 +1,45 @@
+﻿using Eventicator.Services;
+using Eventicator.Views;
+using Models;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
+
+namespace Eventicator.ViewModels
+{
+    public class EventListViewModel : BaseViewModel
+    {
+        private readonly ApiService _apiService;
+
+        public ObservableCollection<Event> Events { get; set; }
+            = new ObservableCollection<Event>();
+
+        public ICommand LoadEventsCommand { get; }
+        public ICommand AddEventCommand { get; }
+        public EventListViewModel()
+        {
+            _apiService = new ApiService();
+            LoadEventsCommand = new Command(async () => await LoadEvents());
+            AddEventCommand = new Command(async () =>
+               await Shell.Current.Navigation.PushAsync(new EventCreateView()));
+        }
+     
+
+        private async Task LoadEvents()
+        {
+            IsBusy = true;
+
+            try
+            {
+                Events.Clear();
+                var items = await _apiService.GetEventsAsync();
+
+                foreach (var ev in items)
+                    Events.Add(ev);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+        }
+    }
+}

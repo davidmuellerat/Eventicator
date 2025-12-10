@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="Eventicator/Eventicator.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
+  <Project Path="Models/Models.csproj" />
+  <Project Path="ORM/ORM.csproj" Id="68722492-ce16-4af9-9ede-d776b64d4a77" />
+  <Project Path="WebAPI_Server/WebAPI_Server.csproj" />
+</Solution>
