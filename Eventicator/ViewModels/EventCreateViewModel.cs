@@ -32,7 +32,7 @@ namespace Eventicator.ViewModels
             };
 
             await _api.CreateEventAsync(newEvent);
-            await Shell.Current.GoToAsync("..");
+            await Shell.Current.Navigation.PopAsync();
         }
     }
 }
