@@ -1,5 +1,6 @@
-﻿using Models;
+using Models;
 using Eventicator.Services;
+using Microsoft.Maui.Controls;
 using System.Windows.Input;
 
 namespace Eventicator.ViewModels
@@ -27,12 +28,14 @@ namespace Eventicator.ViewModels
         private async Task Save()
         {
             await _api.UpdateEventAsync(Event);
+            MessagingCenter.Send(this, "EventsUpdated");
             await _navigation.PopAsync();
         }
 
         private async Task Delete()
         {
             await _api.DeleteEventAsync(Event.Id);
+            MessagingCenter.Send(this, "EventsUpdated");
             await _navigation.PopAsync();
         }
     }

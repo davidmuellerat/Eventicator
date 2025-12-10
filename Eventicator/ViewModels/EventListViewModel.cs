@@ -1,5 +1,6 @@
-﻿using Eventicator.Services;
+using Eventicator.Services;
 using Eventicator.Views;
+using Microsoft.Maui.Controls;
 using Models;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -21,11 +22,15 @@ namespace Eventicator.ViewModels
             LoadEventsCommand = new Command(async () => await LoadEvents());
             AddEventCommand = new Command(async () =>
                await Shell.Current.Navigation.PushAsync(new EventCreateView()));
-        }
-     
 
-        private async Task LoadEvents()
+            MessagingCenter.Subscribe<EventCreateViewModel>(this, "EventsUpdated", async _ => await LoadEvents());
+            MessagingCenter.Subscribe<EventDetailViewModel>(this, "EventsUpdated", async _ => await LoadEvents());
+        }
+
+
+        public async Task LoadEvents()
         {
+            if (IsBusy) return;
             IsBusy = true;
 
             try
