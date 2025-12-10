@@ -1,9 +1,9 @@
 namespace Eventicator.Views;
 
-public partial class EventCreateView : ContentView
+public partial class EventCreateView : ContentPage
 {
-	public EventCreateView()
-	{
-		InitializeComponent();
-	}
+    public EventCreateView()
+    {
+        InitializeComponent();
+    }
 }

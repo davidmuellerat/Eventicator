@@ -14,7 +14,7 @@
     </ContentPage.ToolbarItems>
 
     <RefreshView IsRefreshing="{Binding IsBusy}" Command="{Binding LoadEventsCommand}">
-        <CollectionView ItemsSource="{Binding Events}">
+        <CollectionView ItemsSource="{Binding Events}" SelectionMode="Single" SelectionChanged="OnEventSelected">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Frame Margin="10" Padding="10" BorderColor="#ccc">
