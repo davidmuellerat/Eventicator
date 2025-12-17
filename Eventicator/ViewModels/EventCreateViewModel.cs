@@ -1,5 +1,6 @@
-﻿using Models;
+using Models;
 using Eventicator.Services;
+using Microsoft.Maui.Controls;
 using System.Windows.Input;
 
 namespace Eventicator.ViewModels
@@ -31,7 +32,15 @@ namespace Eventicator.ViewModels
                 Date = Date
             };
 
-            await _api.CreateEventAsync(newEvent);
+            var success = await _api.CreateEventAsync(newEvent);
+
+            if (!success)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Das Event konnte nicht gespeichert werden.", "OK");
+                return;
+            }
+
+            MessagingCenter.Send(this, "EventsUpdated");
             await Shell.Current.Navigation.PopAsync();
         }
     }
