@@ -1,5 +1,7 @@
-﻿using Models;
+using Models;
 using Eventicator.Services;
+using Microsoft.Maui.Controls;
+using CommunityToolkit.Mvvm.Messaging;
 using System.Windows.Input;
 
 namespace Eventicator.ViewModels
@@ -8,9 +10,9 @@ namespace Eventicator.ViewModels
     {
         private readonly ApiService _api;
 
-        public string Title { get; set; }
-        public string Location { get; set; }
-        public string Description { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Location { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public DateTime Date { get; set; } = DateTime.Now;
 
         public ICommand CreateCommand { get; }
@@ -31,7 +33,15 @@ namespace Eventicator.ViewModels
                 Date = Date
             };
 
-            await _api.CreateEventAsync(newEvent);
+            var success = await _api.CreateEventAsync(newEvent);
+
+            if (!success)
+            {
+                await Shell.Current.DisplayAlertAsync("Fehler", "Das Event konnte nicht gespeichert werden.", "OK");
+                return;
+            }
+
+            WeakReferenceMessenger.Default.Send(new EventsUpdatedMessage());
             await Shell.Current.Navigation.PopAsync();
         }
     }

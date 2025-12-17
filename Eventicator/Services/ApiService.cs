@@ -1,4 +1,5 @@
-﻿using Models;
+using Microsoft.Maui.Devices;
+using Models;
 using System.Net.Http.Json;
 
 namespace Eventicator.Services
@@ -11,8 +12,17 @@ namespace Eventicator.Services
         {
             _client = new HttpClient
             {
-                BaseAddress = new Uri("http://localhost:5226/api/")  // API URL
+                BaseAddress = new Uri(GetBaseApiUrl())
             };
+        }
+
+        private static string GetBaseApiUrl()
+        {
+            // When the WebAPI server runs alongside the emulator, localhost must be redirected
+            // to the host machine. On Android emulators, 10.0.2.2 resolves to the host.
+            return DeviceInfo.Platform == DevicePlatform.Android
+                ? "http://10.0.2.2:5226/api/"
+                : "http://localhost:5226/api/";
         }
 
         public async Task<List<Event>> GetEventsAsync()

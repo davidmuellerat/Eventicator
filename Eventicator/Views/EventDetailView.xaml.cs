@@ -9,4 +9,14 @@ public partial class EventDetailView : ContentPage
         InitializeComponent();
         BindingContext = vm;
     }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (BindingContext is EventDetailViewModel vm)
+        {
+            await vm.RefreshFromServerAsync();
+        }
+    }
 }
