@@ -12,6 +12,7 @@ namespace Eventicator.ViewModels
         private readonly INavigation _navigation;
 
         private Event _event = null!;
+        private Event _event;
         public Event Event
         {
             get => _event;
@@ -52,11 +53,13 @@ namespace Eventicator.ViewModels
             if (!success)
             {
                 await Shell.Current.DisplayAlertAsync("Fehler", "Das Event konnte nicht aktualisiert werden.", "OK");
+                await Shell.Current.DisplayAlert("Fehler", "Das Event konnte nicht aktualisiert werden.", "OK");
                 return;
             }
 
             await RefreshFromServerAsync();
             WeakReferenceMessenger.Default.Send(new EventsUpdatedMessage());
+            MessagingCenter.Send(this, "EventsUpdated");
             await _navigation.PopAsync();
         }
 
@@ -71,6 +74,12 @@ namespace Eventicator.ViewModels
             }
 
             WeakReferenceMessenger.Default.Send(new EventsUpdatedMessage());
+
+                await Shell.Current.DisplayAlert("Fehler", "Das Event konnte nicht gelöscht werden.", "OK");
+                return;
+            }
+
+            MessagingCenter.Send(this, "EventsUpdated");
             await _navigation.PopAsync();
         }
     }

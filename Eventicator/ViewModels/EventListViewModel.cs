@@ -2,6 +2,7 @@ using Eventicator.Services;
 using Eventicator.Views;
 using Microsoft.Maui.Controls;
 using CommunityToolkit.Mvvm.Messaging;
+=======
 using Models;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -28,6 +29,9 @@ namespace Eventicator.ViewModels
             {
                 await recipient.LoadEvents();
             });
+
+            MessagingCenter.Subscribe<EventCreateViewModel>(this, "EventsUpdated", async _ => await LoadEvents());
+            MessagingCenter.Subscribe<EventDetailViewModel>(this, "EventsUpdated", async _ => await LoadEvents());
         }
 
 

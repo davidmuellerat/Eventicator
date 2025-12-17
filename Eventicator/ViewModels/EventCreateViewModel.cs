@@ -42,6 +42,12 @@ namespace Eventicator.ViewModels
             }
 
             WeakReferenceMessenger.Default.Send(new EventsUpdatedMessage());
+
+                await Shell.Current.DisplayAlert("Fehler", "Das Event konnte nicht gespeichert werden.", "OK");
+                return;
+            }
+
+            MessagingCenter.Send(this, "EventsUpdated");
             await Shell.Current.Navigation.PopAsync();
         }
     }
