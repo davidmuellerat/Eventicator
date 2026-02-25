@@ -18,6 +18,8 @@ namespace Eventicator.Services
 
         private static string GetBaseApiUrl()
         {
+            // When the WebAPI server runs alongside the emulator, localhost must be redirected
+            // to the host machine. On Android emulators, 10.0.2.2 resolves to the host.
             return DeviceInfo.Platform == DevicePlatform.Android
                 ? "http://10.0.2.2:5226/api/"
                 : "http://localhost:5226/api/";
@@ -28,7 +30,6 @@ namespace Eventicator.Services
             var result = await _client.GetFromJsonAsync<List<Event>>("events");
             return result ?? new List<Event>();
         }
-
         public async Task<Event?> GetEventAsync(int id)
         {
             return await _client.GetFromJsonAsync<Event>($"events/{id}");
@@ -52,34 +53,5 @@ namespace Eventicator.Services
             return response.IsSuccessStatusCode;
         }
 
-
-        public async Task<List<Participant>> GetParticipantsForEventAsync(int eventId)
-        {
-            var result = await _client.GetFromJsonAsync<List<Participant>>($"events/{eventId}/participants");
-            return result ?? new List<Participant>();
-        }
-
-        public async Task<Participant?> GetParticipantAsync(int id)
-        {
-            return await _client.GetFromJsonAsync<Participant>($"participants/{id}");
-        }
-
-        public async Task<bool> CreateParticipantAsync(Participant participant)
-        {
-            var response = await _client.PostAsJsonAsync("participants", participant);
-            return response.IsSuccessStatusCode;
-        }
-
-        public async Task<bool> UpdateParticipantAsync(Participant participant)
-        {
-            var response = await _client.PutAsJsonAsync($"participants/{participant.Id}", participant);
-            return response.IsSuccessStatusCode;
-        }
-
-        public async Task<bool> DeleteParticipantAsync(int id)
-        {
-            var response = await _client.DeleteAsync($"participants/{id}");
-            return response.IsSuccessStatusCode;
-        }
     }
 }

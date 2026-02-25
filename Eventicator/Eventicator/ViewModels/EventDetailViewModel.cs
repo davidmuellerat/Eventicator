@@ -24,7 +24,6 @@ namespace Eventicator.ViewModels
 
         public ICommand SaveCommand { get; }
         public ICommand DeleteCommand { get; }
-        public ICommand OpenParticipantsCommand { get; }   
 
         public EventDetailViewModel(Event ev, INavigation nav)
         {
@@ -34,8 +33,6 @@ namespace Eventicator.ViewModels
 
             SaveCommand = new Command(async () => await Save());
             DeleteCommand = new Command(async () => await Delete());
-
-            OpenParticipantsCommand = new Command(async () => await OpenParticipants());
         }
 
         public async Task RefreshFromServerAsync()
@@ -72,13 +69,6 @@ namespace Eventicator.ViewModels
             }
 
             await _navigation.PopAsync();
-        }
-
-        private async Task OpenParticipants()
-        {
-            var page = new Views.ParticipantListView();
-            page.BindingContext = new ParticipantListViewModel(Event.Id, _navigation);
-            await _navigation.PushAsync(page);
         }
     }
 }

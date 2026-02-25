@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Eventicator.Views.EventListView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:Eventicator.ViewModels">
+
+    <ContentPage.BindingContext>
+        <viewmodels:EventListViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add" Command="{Binding AddEventCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <RefreshView IsRefreshing="{Binding IsBusy}" Command="{Binding LoadEventsCommand}">
+        <CollectionView ItemsSource="{Binding Events}" SelectionMode="Single" SelectionChanged="OnEventSelected">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="10" Padding="10" BorderColor="#ccc">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding Title}" FontSize="20" FontAttributes="Bold"/>
+                            <Label Text="{Binding Location}" TextColor="Gray" />
+                            <Label Text="{Binding Date, StringFormat='{}{0:dd.MM.yyyy}'}" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+
+</ContentPage>

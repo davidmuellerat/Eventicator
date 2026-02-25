@@ -1,22 +1,25 @@
-<ContentPage
+﻿<ContentPage
     x:Class="Eventicator.Views.EventDetailView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:viewmodels="clr-namespace:Eventicator.ViewModels">
+    xmlns:viewmodels="clr-namespace:Eventicator.ViewModels"
+    x:DataType="viewmodels:EventDetailViewModel">
 
     <ContentPage.Content>
         <VerticalStackLayout Padding="20" Spacing="10">
 
             <Label Text="Event Details" FontSize="24" FontAttributes="Bold"/>
 
-            <Entry Text="{Binding Event.Title}" Placeholder="Title"/>
-            <Entry Text="{Binding Event.Location}" Placeholder="Location"/>
-            <Editor Text="{Binding Event.Description}" Placeholder="Description"/>
-            <DatePicker Date="{Binding Event.Date}"/>
+            <Entry Text="{Binding Event.Title, Mode=TwoWay}" Placeholder="Title"/>
+            <Entry Text="{Binding Event.Location, Mode=TwoWay}" Placeholder="Location"/>
+            <Editor Text="{Binding Event.Description, Mode=TwoWay}" Placeholder="Description" AutoSize="TextChanges"/>
+            <DatePicker Date="{Binding Event.Date, Mode=TwoWay}"/>
 
-            <HorizontalStackLayout Spacing="10">
+            <HorizontalStackLayout Spacing="12">
                 <Button Text="Save" Command="{Binding SaveCommand}" />
-                <Button Text="Delete" Command="{Binding DeleteCommand}" TextColor="Red"/>
+                <Button Text="Delete" Command="{Binding DeleteCommand}" />
+
+                <Button Text="Teilnehmer" Command="{Binding OpenParticipantsCommand}" />
             </HorizontalStackLayout>
 
         </VerticalStackLayout>
