@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage                                                                                                                            
-       x:Class="Eventicator.Views.Regis terView"                                                                                           
+       x:Class="Eventicator.Views.RegisterView"                                                                                           
        xmlns="http://schemas.microsoft.com/dotnet/2021/maui"                                                                               
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"                                                                              
-       xmlns:viewmodels="clr-namespace: Eventicator.ViewModels"                                                                            
+       xmlns:viewmodels="clr-namespace:Eventicator.ViewModels"                                                                            
        Title="Register">
 
     <ContentPage.BindingContext>

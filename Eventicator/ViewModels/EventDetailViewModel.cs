@@ -7,6 +7,7 @@ using System.Xml.Linq;
 
 namespace Eventicator.ViewModels
 {
+
     public class EventDetailViewModel : BaseViewModel
     {
         private readonly ApiService _api;
@@ -22,9 +23,7 @@ namespace Eventicator.ViewModels
                 if (_event == value) return;
                 _event = value;
                 OnPropertyChanged(nameof(Event));
-                EnrollCommand = new Command(async() => await Enroll());
             }
-           
         }
 
         public ICommand SaveCommand { get; }
@@ -36,6 +35,7 @@ namespace Eventicator.ViewModels
             _api = new ApiService();
             _navigation = nav;
             Event = ev;
+            EnrollCommand = new Command(async () => await Enroll());
 
             SaveCommand = new Command(async () => await Save());
             DeleteCommand = new Command(async () => await Delete());
