@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;                                                                                              
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using ORM;
+using System.Security.Claims;                                                                                                           
 using WebAPI_Server.Data;
+using WebAPI_Server.DTOs;             
 
 namespace WebAPI_Server.Controllers
 {
@@ -76,6 +79,42 @@ namespace WebAPI_Server.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
+        }
+        [Authorize(Roles = "Participant")]
+        [HttpPost("{eventId}/enroll")]
+        public async Task<ActionResult> Enroll(int eventId, EnrollRequest req)
+        {
+            // Event existiert?                                                                                                                 
+            var evExists = await _context.Events.AnyAsync(e => e.Id == eventId);
+            if (!evExists) return NotFound("Event not found.");
+
+            // eingeloggter User                                                                                                                
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdStr == null) return Unauthorized();
+
+            var userId = int.Parse(userIdStr);
+
+            // User laden                                                                                                                       
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null) return Unauthorized();
+
+            // already enrolled? (wir matchen simpel über Email+EventId)                                                                        
+            var email = req.Email.Trim().ToLowerInvariant();
+            var already = await _context.Participants.AnyAsync(p => p.EventId == eventId && p.Email.ToLower() == email);
+            if (already) return BadRequest("Already enrolled.");
+
+            var participant = new Participant
+            {
+                EventId = eventId,
+                FirstName = req.FirstName,
+                LastName = req.LastName,
+                Email = email
+            };
+
+            _context.Participants.Add(participant);
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }

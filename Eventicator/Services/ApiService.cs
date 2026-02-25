@@ -1,6 +1,8 @@
 using Microsoft.Maui.Devices;
 using Models;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
+
 
 namespace Eventicator.Services
 {
@@ -14,6 +16,12 @@ namespace Eventicator.Services
             {
                 BaseAddress = new Uri(GetBaseApiUrl())
             };
+
+            if (!string.IsNullOrWhiteSpace(AuthSession.Token))
+            {
+                _client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", AuthSession.Token);
+            }
         }
 
         private static string GetBaseApiUrl()
@@ -79,6 +87,18 @@ namespace Eventicator.Services
         public async Task<bool> DeleteParticipantAsync(int id)
         {
             var response = await _client.DeleteAsync($"participants/{id}");
+            return response.IsSuccessStatusCode;
+        }
+        public async Task<bool> EnrollInEventAsync(int eventId, string firstName, string lastName, string email)
+        {
+            var payload = new
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email
+            };
+
+            var response = await _client.PostAsJsonAsync($"events/{eventId}/enroll", payload);
             return response.IsSuccessStatusCode;
         }
     }

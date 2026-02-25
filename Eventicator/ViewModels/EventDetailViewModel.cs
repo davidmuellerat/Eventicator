@@ -1,7 +1,9 @@
-using Models;
 using Eventicator.Services;
 using Microsoft.Maui.Controls;
+using Models;
+using System.Collections.Generic;
 using System.Windows.Input;
+using System.Xml.Linq;
 
 namespace Eventicator.ViewModels
 {
@@ -9,6 +11,7 @@ namespace Eventicator.ViewModels
     {
         private readonly ApiService _api;
         private readonly INavigation _navigation;
+        public ICommand EnrollCommand { get; }
 
         private Event _event;
         public Event Event
@@ -19,7 +22,9 @@ namespace Eventicator.ViewModels
                 if (_event == value) return;
                 _event = value;
                 OnPropertyChanged(nameof(Event));
+                EnrollCommand = new Command(async() => await Enroll());
             }
+           
         }
 
         public ICommand SaveCommand { get; }
@@ -79,6 +84,36 @@ namespace Eventicator.ViewModels
             var page = new Views.ParticipantListView();
             page.BindingContext = new ParticipantListViewModel(Event.Id, _navigation);
             await _navigation.PushAsync(page);
+        }
+        private async Task Enroll()
+        {
+            if (!AuthSession.IsLoggedIn)
+            {
+                await Shell.Current.DisplayAlert("Login nötig", "Bitte zuerst einloggen.", "OK");
+                await Shell.Current.GoToAsync("//login");
+                return;
+            }
+
+            var firstName = await Shell.Current.DisplayPromptAsync("Einschreiben", "Vorname:");
+            if (string.IsNullOrWhiteSpace(firstName)) return;
+
+            var lastName = await Shell.Current.DisplayPromptAsync("Einschreiben", "Nachname:");
+            if (string.IsNullOrWhiteSpace(lastName)) return;
+
+            var defaultEmail = AuthSession.Email ?? "";
+            var email = await Shell.Current.DisplayPromptAsync("Einschreiben", "Email:", initialValue: defaultEmail);
+            if (string.IsNullOrWhiteSpace(email)) return;
+
+            var ok = await _api.EnrollInEventAsync(Event.Id, firstName, lastName, email);
+
+            if (!ok)
+            {
+                await Shell.Current.DisplayAlert("Fehler", "Einschreiben fehlgeschlagen.", "OK");
+                return;
+            }
+
+            await Shell.Current.DisplayAlert("OK", "Du bist eingeschrieben.", "OK");
+            await RefreshFromServerAsync();
         }
     }
 }

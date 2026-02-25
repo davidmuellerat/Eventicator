@@ -18,8 +18,8 @@
             <HorizontalStackLayout Spacing="12">
                 <Button Text="Save" Command="{Binding SaveCommand}" />
                 <Button Text="Delete" Command="{Binding DeleteCommand}" />
-
                 <Button Text="Teilnehmer" Command="{Binding OpenParticipantsCommand}" />
+                <Button Text="Einschreiben" Command="{Binding EnrollCommand}" />
             </HorizontalStackLayout>
 
         </VerticalStackLayout>

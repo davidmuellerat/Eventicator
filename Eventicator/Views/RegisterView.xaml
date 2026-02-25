@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage                                                                                                                            
+       x:Class="Eventicator.Views.Regis terView"                                                                                           
+       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"                                                                               
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"                                                                              
+       xmlns:viewmodels="clr-namespace: Eventicator.ViewModels"                                                                            
+       Title="Register">
+
+    <ContentPage.BindingContext>
+        <viewmodels:RegisterViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="12">
+
+            <Label Text="Register" FontSize="24" FontAttributes="Bold"/>
+
+            <Entry Placeholder="Email" Text="{Binding Email}" Keyboard="Email" />
+            <Entry Placeholder="Passwort" Text="{Binding Password}" IsPassword="True" />
+
+            <Label Text="Rolle" />
+            <Picker SelectedItem="{Binding Role}">
+                <Picker.Items>
+                    <x:String>Participant</x:String>
+                    <x:String>Admin</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <Entry Placeholder="FirstName (optional)" Text="{Binding FirstName}" />
+            <Entry Placeholder="LastName (optional)" Text="{Binding LastName}" />
+
+            <Button Text="Registrieren" Command="{Binding RegisterCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>    

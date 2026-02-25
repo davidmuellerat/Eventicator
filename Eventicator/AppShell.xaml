@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Shell 
-    x:Class="Eventicator.AppShell"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:views="clr-namespace:Eventicator.Views">
+<Shell                                                                                                                                  
+       x:Class="Eventicator.AppShell"                                                                                                      
+       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"                                                                               
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"                                                                              
+       xmlns:views="clr-namespace:Event icator.Views">
 
-    <ShellContent 
-        Title="Events"
-        ContentTemplate="{DataTemplate views:EventListView}" />
+    <!-- Start: Login -->
+    <ShellContent                                                                                                                       
+           Title="Login"                                                                                                                   
+           Route="login"                                                                                                                   
+           ContentTemplate="{DataTemplate views:LoginView}" />
 
-</Shell>
+    <!-- Hauptseite: Events -->
+    <ShellContent                                                                                                                       
+           Title="Events"                                                                                                                  
+           Route="events"                                                                                                                  
+           ContentTemplate="{DataTemplate views:EventListView}" />
+
+</Shell>   
