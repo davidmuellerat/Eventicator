@@ -19,23 +19,18 @@ namespace WebAPI_Server.Controllers
         {
             _context = context;
         }
-
         // GET: api/events
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Event>>> GetEvents()
         {
-            return await _context.Events
-                .Include(e => e.Participants)
-                .ToListAsync();
+            return await _context.Events.ToListAsync();
         }
 
         // GET: api/events/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Event>> GetEvent(int id)
         {
-            var ev = await _context.Events
-                .Include(e => e.Participants)
-                .FirstOrDefaultAsync(e => e.Id == id);
+            var ev = await _context.Events.FirstOrDefaultAsync(e => e.Id == id);
 
             if (ev == null)
                 return NotFound();

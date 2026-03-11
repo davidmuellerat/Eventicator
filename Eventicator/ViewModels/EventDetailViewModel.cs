@@ -104,11 +104,18 @@ namespace Eventicator.ViewModels
             var email = await Shell.Current.DisplayPromptAsync("Einschreiben", "Email:", initialValue: defaultEmail);
             if (string.IsNullOrWhiteSpace(email)) return;
 
-            var ok = await _api.EnrollInEventAsync(Event.Id, firstName, lastName, email);
+            // optional Debug: Token vorhanden?
+            await Shell.Current.DisplayAlert("DEBUG",
+                $"Token Null ? {string.IsNullOrWhiteSpace(AuthSession.Token)}\nRole: {AuthSession.Role}\nEmail: {AuthSession.Email}",
+                "OK");
 
-            if (!ok)
+            var (res, dbg) = await _api.EnrollInEventDebugAsync(Event.Id, firstName, lastName, email);
+            var body = await res.Content.ReadAsStringAsync();
+
+            if (!res.IsSuccessStatusCode)
             {
-                await Shell.Current.DisplayAlert("Fehler", "Einschreiben fehlgeschlagen.", "OK");
+                await Shell.Current.DisplayAlert("Einschreiben fehlgeschlagen",
+                    $"{dbg}\n\n{(int)res.StatusCode} {res.StatusCode}\n{body}", "OK");
                 return;
             }
 

@@ -44,10 +44,10 @@ namespace Eventicator.Services
             var res = await _client.PostAsJsonAsync("auth/login", payload);
             if (!res.IsSuccessStatusCode) return false;
 
-            var data = await res.Content.ReadFromJsonAsync <AuthResponse> ();
+            var data = await res.Content.ReadFromJsonAsync<AuthResponse>();
             if (data == null) return false;
 
-            AuthSession.Set(data.Token, data.Role, data.Email, data.UserId);
+            AuthSession.Set(data.Token.Trim(), data.Role, data.Email, data.UserId);
             return true;
         }
 
