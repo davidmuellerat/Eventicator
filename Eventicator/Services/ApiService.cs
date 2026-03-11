@@ -66,6 +66,25 @@ namespace Eventicator.Services
             var result = await _client.GetFromJsonAsync<List<Participant>>($"events/{eventId}/participants");
             return result ?? new List<Participant>();
         }
+        public async Task<bool> DeleteParticipantAsync(int id)
+        {
+            var response = await _client.DeleteAsync($"participants/{id}");
+            return response.IsSuccessStatusCode;
+        }
+        public async Task<Participant?> GetParticipantAsync(int id)
+    => await _client.GetFromJsonAsync<Participant>($"participants/{id}");
+
+        public async Task<bool> CreateParticipantAsync(Participant participant)
+        {
+            var response = await _client.PostAsJsonAsync("participants", participant);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> UpdateParticipantAsync(Participant participant)
+        {
+            var response = await _client.PutAsJsonAsync($"participants/{participant.Id}", participant);
+            return response.IsSuccessStatusCode;
+        }
 
         // DEBUG/Diagnose-Variante: gibt Response + Debugtext zurück
         public async Task<(HttpResponseMessage res, string debug)> EnrollInEventDebugAsync(

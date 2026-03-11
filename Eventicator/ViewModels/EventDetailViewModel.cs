@@ -14,7 +14,7 @@ namespace Eventicator.ViewModels
         private readonly INavigation _navigation;
         public ICommand EnrollCommand { get; }
 
-        private Event _event;
+        private Event _event = null!;
         public Event Event
         {
             get => _event;

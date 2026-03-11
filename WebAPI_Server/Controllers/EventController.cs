@@ -75,7 +75,7 @@ namespace WebAPI_Server.Controllers
 
             return NoContent();
         }
-        [Authorize(Roles = "Participant")]
+        [Authorize(Roles = "Participant,Admin")]
         [HttpPost("{eventId}/enroll")]
         public async Task<ActionResult> Enroll(int eventId, EnrollRequest req)
         {
